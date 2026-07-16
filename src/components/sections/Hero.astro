@@ -1,59 +1,29 @@
 ---
 import { MISSION_EPOCH } from "../../data/site";
-
-// Generate 15 sparse random points for layer 1 (Distant Field)
-// Using deterministic pseudo-random values based on index
-const distantPoints = Array.from({ length: 15 }).map((_, i) => {
-  const x = ((i * 137) % 100);
-  const y = ((i * 93) % 100);
-  const opacity = 0.15 + (((i * 17) % 15) / 100); // 0.15 to 0.3
-  const size = 1 + (i % 2); // 1px or 2px
-  return { x, y, opacity, size };
-});
 ---
 <section id="home" class="pt-32 pb-20 md:pt-40 md:pb-24 flex flex-col items-start justify-center max-w-7xl mx-auto px-6 font-mono">
-  <div id="hero-panel" class="hero-panel w-full border border-border bg-surface/30 p-6 md:p-8 relative overflow-hidden flex flex-col md:flex-row gap-8 items-start">
-    
-    <!-- Layer 0: Void -->
-    <div class="parallax-layer" data-depth="0.02" aria-hidden="true">
-      <div class="void-bg"></div>
-      <div class="arrival-glow"></div>
+  <div id="hero-panel" class="hero-panel w-full border border-border bg-surface/35 p-6 md:p-8 relative overflow-hidden flex flex-col md:flex-row gap-8 items-start">
+
+    <!-- Porthole vignette (seen *through*) -->
+    <div class="porthole-vignette pointer-events-none absolute inset-0 z-0"></div>
+
+    <!-- Bolt/rivet glyphs -->
+    <div class="corner-bolt absolute top-3 left-3 text-primary/60" style="--d:0">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 1V3M6 9V11M1 6H3M9 6H11" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="corner-bolt absolute top-3 right-3 text-primary/60" style="--d:1">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 1V3M6 9V11M1 6H3M9 6H11" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="corner-bolt absolute bottom-3 left-3 text-primary/60" style="--d:2">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 1V3M6 9V11M1 6H3M9 6H11" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="corner-bolt absolute bottom-3 right-3 text-primary/60" style="--d:3">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 1V3M6 9V11M1 6H3M9 6H11" stroke="currentColor" stroke-width="1.5"/></svg>
     </div>
 
-    <!-- Layer 1: Distant field -->
-    <div class="parallax-layer" data-depth="0.05" aria-hidden="true">
-      {distantPoints.map(point => (
-        <div class="distant-point" style={`left: ${point.x}%; top: ${point.y}%; opacity: ${point.opacity}; width: ${point.size}px; height: ${point.size}px;`}></div>
-      ))}
-    </div>
-
-    <!-- Layer 2: Petrova line -->
-    <div class="parallax-layer" data-depth="0.12" aria-hidden="true">
-      <div class="petrova-line"></div>
-    </div>
-
-    <!-- Layer 3: Porthole frame (Static, seen *through*) -->
-    <div class="porthole-frame pointer-events-none absolute inset-0 z-20">
-      <div class="porthole-vignette absolute inset-0"></div>
-      
-      <!-- Bolt/rivet glyphs replacing plain corner brackets -->
-      <div class="corner-bolt absolute top-3 left-3 text-primary/60" style="--d:0">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 1V3M6 9V11M1 6H3M9 6H11" stroke="currentColor" stroke-width="1.5"/></svg>
-      </div>
-      <div class="corner-bolt absolute top-3 right-3 text-primary/60" style="--d:1">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 1V3M6 9V11M1 6H3M9 6H11" stroke="currentColor" stroke-width="1.5"/></svg>
-      </div>
-      <div class="corner-bolt absolute bottom-3 left-3 text-primary/60" style="--d:2">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 1V3M6 9V11M1 6H3M9 6H11" stroke="currentColor" stroke-width="1.5"/></svg>
-      </div>
-      <div class="corner-bolt absolute bottom-3 right-3 text-primary/60" style="--d:3">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 1V3M6 9V11M1 6H3M9 6H11" stroke="currentColor" stroke-width="1.5"/></svg>
-      </div>
-    </div>
-
-    <!-- Layer 4: Console/instrumentation (Static content) -->
-    <div class="flex-1 relative z-30 pointer-events-none flex flex-col md:flex-row gap-8 w-full">
-      <div class="flex-1 pointer-events-auto">
+    <!-- Console/instrumentation -->
+    <div class="flex-1 relative z-10 flex flex-col md:flex-row gap-8 w-full">
+      <div class="flex-1">
         <div class="flex items-center gap-3 text-xs text-text-muted mb-6 uppercase tracking-widest">
           <span id="status-dot" class="w-2 h-2 bg-accent"></span>
           <span id="status-text">Reviving crew // stand by</span>
@@ -84,7 +54,7 @@ const distantPoints = Array.from({ length: 15 }).map((_, i) => {
         </div>
       </div>
 
-      <div class="w-full md:w-80 p-4 bg-card border border-border text-xs text-text-muted space-y-3 font-mono relative pointer-events-auto shadow-2xl">
+      <div class="w-full md:w-80 p-4 bg-card border border-border text-xs text-text-muted space-y-3 font-mono relative shadow-2xl">
         <div class="flex items-center justify-between border-b border-border pb-2 mb-3">
           <span class="uppercase tracking-widest text-text font-bold">Telemetry Data</span>
           <span id="mission-clock" class="text-accent tabular-nums" title="Mission elapsed time" data-epoch={MISSION_EPOCH}>T+ --:--:--</span>
@@ -109,77 +79,15 @@ const distantPoints = Array.from({ length: 15 }).map((_, i) => {
 <style>
   .hero-panel {
     isolation: isolate;
-    /* subtle beveled edge effect indicating window boundary */
     box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), inset 0 2px 20px rgba(0,0,0,0.4);
   }
 
-  /* --- Parallax Layers System --- */
-  .parallax-layer {
-    position: absolute;
-    /* slightly oversized so edges don't clip during translation */
-    inset: -30px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* Layer 0: Void */
-  .void-bg {
-    position: absolute;
-    inset: 0;
-    /* very slow color temperature drift */
-    background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--surface) 40%, #050505), #020202 100%);
-  }
-
-  .arrival-glow {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    background: radial-gradient(
-      ellipse 70% 60% at 15% 100%,
-      color-mix(in srgb, var(--accent) 18%, transparent),
-      transparent 70%
-    );
-    transition: opacity 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-  .hero-panel.arrived .arrival-glow {
-    opacity: 1;
-  }
-
-  /* Layer 1: Distant Field */
-  .distant-point {
-    position: absolute;
-    background-color: color-mix(in srgb, var(--primary) 70%, white);
-    border-radius: 50%;
-  }
-
-  /* Layer 2: Petrova Line */
-  .petrova-line {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      115deg,
-      transparent 45%,
-      color-mix(in srgb, var(--secondary) 70%, transparent) 49.5%,
-      color-mix(in srgb, var(--danger) 80%, transparent) 50.5%,
-      transparent 55%
-    );
-    filter: blur(2px);
-    opacity: 0.35;
-    animation: petrova-breathe 6s ease-in-out infinite;
-  }
-  @keyframes petrova-breathe {
-    0%, 100% { opacity: 0.22; filter: blur(2px); }
-    50% { opacity: 0.45; filter: blur(3px); }
-  }
-
-  /* Layer 3: Porthole Frame */
   .porthole-vignette {
     background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
-    pointer-events: none;
   }
 
-  /* Corner Bolts */
   .corner-bolt {
+    z-index: 10;
     opacity: 0;
     transform: scale(0.4) rotate(-45deg);
     animation: bolt-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -189,11 +97,9 @@ const distantPoints = Array.from({ length: 15 }).map((_, i) => {
     to { opacity: 1; transform: scale(1) rotate(0deg); }
   }
 
-  /* --- Content Animations --- */
   .telemetry-row {
     opacity: 0;
     transform: translateY(6px);
-    /* using var(--t) for micro-variation in timing */
     animation: row-in var(--t, 400ms) cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     animation-delay: calc(500ms + var(--d) * 130ms);
   }
@@ -217,7 +123,6 @@ const distantPoints = Array.from({ length: 15 }).map((_, i) => {
   #status-dot {
     display: inline-block;
     border-radius: 9999px;
-    /* Eased transition instead of hard cut */
     transition: background-color 0.4s ease-out, box-shadow 0.4s ease-out;
   }
   #status-dot.online {
@@ -229,21 +134,16 @@ const distantPoints = Array.from({ length: 15 }).map((_, i) => {
     50% { opacity: 0.6; box-shadow: 0 0 4px color-mix(in srgb, var(--success) 40%, transparent); }
   }
 
-  /* --- Reduced Motion --- */
   @media (prefers-reduced-motion: reduce) {
-    .parallax-layer { transform: none !important; transition: none !important; will-change: auto !important; }
-    .petrova-line { animation: none; opacity: 0.3; }
     .corner-bolt { animation: none; opacity: 1; transform: none; }
     .telemetry-row { animation: none; opacity: 1; transform: none; }
     .cursor { animation: none; }
     #status-dot.online { animation: none; }
-    .arrival-glow { transition: none; }
   }
 </style>
 
 <script>
   function initHeroSequence() {
-    const panel = document.getElementById("hero-panel");
     const statusDot = document.getElementById("status-dot");
     const statusText = document.getElementById("status-text");
     const lines = Array.from(document.querySelectorAll<HTMLElement>(".typewriter-line"));
@@ -256,23 +156,19 @@ const distantPoints = Array.from({ length: 15 }).map((_, i) => {
         line.textContent = line.dataset.text ?? "";
         line.nextElementSibling?.classList.add("done");
       });
-      panel?.classList.add("arrived");
     }
 
     if (reduceMotion) {
       finalizeInstantly();
       startMissionClock();
-      return; // Skip animations and parallax
+      return;
     }
 
-    // --- Awakening Sequence ---
-    // Beat 1: revival diagnostic resolves (~700ms, eased naturally)
     window.setTimeout(() => {
       statusDot?.classList.add("online");
       if (statusText) statusText.textContent = "System Online // ID: M.CORONA";
     }, 700);
 
-    // Beat 2: Typewriter lines
     let typeStart = 950;
     lines.forEach((line) => {
       const text = line.dataset.text ?? "";
@@ -280,130 +176,17 @@ const distantPoints = Array.from({ length: 15 }).map((_, i) => {
       typeStart += text.length * 14 + 250;
     });
 
-    // Beat 3: arrival glow
-    window.setTimeout(() => {
-      panel?.classList.add("arrived");
-    }, typeStart + 100);
-
     startMissionClock();
-
-    // --- Parallax Mechanics ---
-    initParallax();
-  }
-
-  function initParallax() {
-    const layers = Array.from(document.querySelectorAll<HTMLElement>('.parallax-layer'));
-    if (!layers.length) return;
-
-    let targetX = 0;
-    let targetY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let scrollOffset = 0;
-    let isAnimating = false;
-    let rafId: number;
-
-    const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor;
-
-    const handlePointerMove = (e: MouseEvent) => {
-      // Normalize pointer position to -1..1
-      targetX = (e.clientX / window.innerWidth) * 2 - 1;
-      targetY = (e.clientY / window.innerHeight) * 2 - 1;
-      startAnimation();
-    };
-
-    const handleScroll = () => {
-      // Slight vertical drift when scrolling away
-      const scrollY = window.scrollY;
-      if (scrollY < window.innerHeight) {
-        scrollOffset = (scrollY / window.innerHeight) * 0.5; // max 0.5 down
-        startAnimation();
-      }
-    };
-
-    const handleDeviceOrientation = (e: DeviceOrientationEvent) => {
-      if (e.gamma !== null && e.beta !== null) {
-        // gamma: -90 to 90, beta: -180 to 180
-        targetX = Math.max(-1, Math.min(1, e.gamma / 45));
-        targetY = Math.max(-1, Math.min(1, (e.beta - 45) / 45));
-        startAnimation();
-      }
-    };
-
-    function startAnimation() {
-      if (!isAnimating) {
-        isAnimating = true;
-        layers.forEach(l => l.style.willChange = 'transform');
-        rafId = requestAnimationFrame(updateParallax);
-      }
-    }
-
-    let driftTime = 0;
-    function driftFallback() {
-      driftTime += 0.005;
-      targetX = Math.sin(driftTime) * 0.4;
-      targetY = Math.cos(driftTime * 0.7) * 0.4;
-      startAnimation();
-      requestAnimationFrame(driftFallback);
-    }
-
-    const updateParallax = () => {
-      // Lerp current towards target + scroll modifier
-      currentX = lerp(currentX, targetX, 0.08);
-      currentY = lerp(currentY, targetY + scrollOffset, 0.08);
-
-      // Settle check
-      const dx = Math.abs(targetX - currentX);
-      const dy = Math.abs(targetY + scrollOffset - currentY);
-      if (dx < 0.001 && dy < 0.001) {
-        currentX = targetX;
-        currentY = targetY + scrollOffset;
-        isAnimating = false;
-        layers.forEach(l => l.style.willChange = 'auto');
-      }
-
-      layers.forEach(layer => {
-        const depth = parseFloat(layer.dataset.depth || '0');
-        // Max travel is 120px * depth (e.g. 120 * 0.12 = 14.4px)
-        const moveX = currentX * 120 * depth;
-        const moveY = currentY * 120 * depth;
-        layer.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
-      });
-
-      if (isAnimating) {
-        rafId = requestAnimationFrame(updateParallax);
-      }
-    };
-
-    // Setup listeners
-    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    
-    if (isTouch) {
-      if (typeof DeviceOrientationEvent !== 'undefined') {
-        window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
-      }
-      // Start drift fallback just in case deviceorientation is locked/unsupported
-      // We wait a second to see if targetX/Y are updated by orientation
-      setTimeout(() => {
-        if (targetX === 0 && targetY === 0) {
-          driftFallback();
-        }
-      }, 1000);
-    } else {
-      window.addEventListener('mousemove', handlePointerMove, { passive: true });
-      window.addEventListener('scroll', handleScroll, { passive: true });
-    }
   }
 
   function typeLine(el: HTMLElement, text: string) {
     let i = 0;
     const cursor = el.nextElementSibling as HTMLElement | null;
-    
+
     function typeNext() {
       if (i < text.length) {
         el.textContent = text.slice(0, i + 1);
         i++;
-        // Add slight timing variance so it feels less mechanical
         const jitter = Math.random() * 8 - 4;
         window.setTimeout(typeNext, 14 + jitter);
       } else {
@@ -433,5 +216,5 @@ const distantPoints = Array.from({ length: 15 }).map((_, i) => {
     window.setInterval(tick, 1000);
   }
 
-  document.addEventListener("astro:page-load", initHeroSequence);
+  initHeroSequence();
 </script>

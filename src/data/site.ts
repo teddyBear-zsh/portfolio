@@ -22,7 +22,7 @@ export const SOCIALS = [
 // Epoch for the Hero's "T+" mission-elapsed-time counter.
 // Change this to whatever launch date makes sense to you —
 // e.g. the day you publish the site, or the day you started this career path.
-export const MISSION_EPOCH = "2026-15-06 T00:00:00Z";
+export const MISSION_EPOCH = "2026-06-15T00:00:00Z";
 
 export const NAV_LINKS = [
   { label: "About", href: "#about" },

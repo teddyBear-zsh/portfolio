@@ -68,6 +68,24 @@
   }
 }
 
+/* Scroll-reveal: sections fade/slide in as they enter the viewport */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Subtle background grid - coordinate system look */
 .bg-grid {
   background-size: 50px 50px;

@@ -1,0 +1,142 @@
+---
+function genStars(count: number, sizeMin: number, sizeMax: number, opMin: number, opMax: number, seed: number) {
+  return Array.from({ length: count }).map((_, i) => {
+    const x = ((i * 137 + seed * 53) % 1000) / 10;
+    const y = ((i * 211 + seed * 29) % 1000) / 10;
+    const size = sizeMin + ((i * 17 + seed) % (sizeMax - sizeMin + 1));
+    const op = opMin + (((i * 13 + seed * 7) % 100) / 100) * (opMax - opMin);
+    const dur = 2 + ((i * 7 + seed) % 4);
+    const delay = ((i * 3 + seed) % 10) * 0.3;
+    return {
+      xPct: `${x}%`,
+      yPct: `${y}%`,
+      sizePx: `${size}px`,
+      opMin: Math.max(0.1, op - 0.3),
+      opMax: Math.min(1, op + 0.3),
+      durS: `${dur}s`,
+      delayS: `${delay}s`,
+    };
+  });
+}
+
+const farStars = genStars(70, 1, 2, 0.08, 0.35, 3);
+const midStars = genStars(40, 1, 2, 0.15, 0.5, 11);
+const nearStars = genStars(14, 2, 3, 0.3, 0.9, 19);
+---
+
+<div class="starfield" aria-hidden="true">
+  <div class="nebula nebula-a"></div>
+  <div class="nebula nebula-b"></div>
+  <div class="petrova"></div>
+  <div class="star-layer">
+    {farStars.map((s) => (
+      <div class="star star-far" style={`left:${s.xPct};top:${s.yPct};width:${s.sizePx};height:${s.sizePx};`} />
+    ))}
+  </div>
+  <div class="star-layer">
+    {midStars.map((s) => (
+      <div class="star star-mid" style={`left:${s.xPct};top:${s.yPct};width:${s.sizePx};height:${s.sizePx};`} />
+    ))}
+  </div>
+  <div class="star-layer">
+    {nearStars.map((s) => (
+      <div
+        class="star star-near"
+        style={`left:${s.xPct};top:${s.yPct};width:${s.sizePx};height:${s.sizePx};--min:${s.opMin};--max:${s.opMax};animation-duration:${s.durS};animation-delay:${s.delayS};`}
+      />
+    ))}
+  </div>
+  <div class="scanline"></div>
+</div>
+
+<style>
+  .starfield {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 12%, #1c2647 0%, #0d1120 55%, #05060a 100%);
+  }
+
+  .nebula {
+    position: absolute;
+    width: 560px;
+    height: 560px;
+    border-radius: 50%;
+    filter: blur(42px);
+    animation: nebula-drift 24s ease-in-out infinite;
+  }
+  .nebula-a {
+    left: -12%;
+    top: 4%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 28%, transparent), transparent 70%);
+  }
+  .nebula-b {
+    right: -10%;
+    top: 32%;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, color-mix(in srgb, var(--secondary) 28%, transparent), transparent 70%);
+    animation-duration: 28s;
+    animation-delay: -9s;
+  }
+  @keyframes nebula-drift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -24px); }
+  }
+
+  .petrova {
+    position: absolute;
+    inset: -15%;
+    background: linear-gradient(
+      115deg,
+      transparent 46%,
+      color-mix(in srgb, var(--secondary) 55%, transparent) 49%,
+      color-mix(in srgb, var(--danger) 55%, transparent) 50.5%,
+      transparent 54%
+    );
+    opacity: 0.22;
+    animation: petrova-breathe 7s ease-in-out infinite;
+  }
+  @keyframes petrova-breathe {
+    0%, 100% { opacity: 0.18; filter: blur(2px); }
+    50% { opacity: 0.4; filter: blur(3px); }
+  }
+
+  .star-layer { position: absolute; inset: 0; }
+  .star { position: absolute; border-radius: 50%; }
+  .star-far { background: #e9ecf5; }
+  .star-mid { background: #f4ecff; }
+  .star-near {
+    background: #fff8ec;
+    animation-name: twinkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--min, 0.2); }
+    50% { opacity: var(--max, 0.9); }
+  }
+
+  .scanline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--accent) 6%, transparent), transparent);
+    animation: scanline 9s linear infinite;
+  }
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+
+  :global(html.light) .starfield {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nebula, .petrova, .star-near, .scanline { animation: none; }
+  }
+</style>
