@@ -39,23 +39,6 @@
       --danger: #DE1A58;
   }
 
-  /* Optional light theme if toggled */
-  .light {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --card: #f1f5f9;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      
-      --primary: #360185;
-      --secondary: #8F0177;
-      --accent: #F4B342;
-      --warning: #eab308;
-      --success: #10b981;
-      --danger: #DE1A58;
-  }
-
   body {
       background-color: var(--bg);
       color: var(--text);
