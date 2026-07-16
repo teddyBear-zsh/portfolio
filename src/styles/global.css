@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+}
+
+@layer base {
+  :root {
+      /* Prefer dark neutral backgrounds as requested, so default root is dark */
+      --bg: #151c2f;
+      --surface: #131722;
+      --card: #181d2b;
+      
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      
+      --border: #2a3143;
+      
+      --primary: #8F0177;
+      --secondary: #360185; 
+      --accent: #F4B342;
+      --warning: #F4B342;
+      --success: #10b981;
+      --danger: #DE1A58;
+  }
+
+  /* Optional light theme if toggled */
+  .light {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --card: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      
+      --primary: #360185;
+      --secondary: #8F0177;
+      --accent: #F4B342;
+      --warning: #eab308;
+      --success: #10b981;
+      --danger: #DE1A58;
+  }
+
+  body {
+      background-color: var(--bg);
+      color: var(--text);
+      @apply font-sans antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+      @apply font-heading tracking-tight;
+  }
+}
+
+/* Subtle background grid - coordinate system look */
+.bg-grid {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 10%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 10%, #000 40%, transparent 100%);
+}

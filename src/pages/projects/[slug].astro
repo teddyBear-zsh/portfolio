@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<Layout title={`${project.name} | Documentation`} description={project.description}>
+  <Navigation />
+  <main class="max-w-4xl mx-auto px-6 py-24 font-mono">
+
+    <!-- Back link -->
+    <a href="/#projects" class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-text-muted hover:text-primary transition-colors mb-10 group border border-transparent hover:border-primary px-3 py-1 bg-surface">
+      <span class="group-hover:-translate-x-1 transition-transform">←</span>
+      Return to Operations
+    </a>
+
+    <!-- Header -->
+    <div class="mb-12 border border-border bg-surface/30 p-6 md:p-8 relative">
+      <div class="absolute top-0 right-0 w-8 h-8 border-l border-b border-border bg-surface flex items-center justify-center text-text-muted text-[10px]">DOC</div>
+      
+      <div class="flex items-center gap-3 mb-6">
+        <span class="px-2 py-1 text-[10px] uppercase tracking-widest border border-primary text-primary bg-primary/10">
+          Status: {project.status || 'Active'}
+        </span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-bold font-heading text-text mb-4 uppercase tracking-tight">{project.name}</h1>
+      <p class="text-sm md:text-base text-text-muted leading-relaxed">{project.description}</p>
+
+      <!-- Tech stack -->
+      <div class="flex flex-wrap gap-2 mt-6">
+        {project.technologies.map(tech => (
+          <span class="px-2 py-1 text-xs uppercase tracking-widest bg-card border border-border text-accent">{tech}</span>
+        ))}
+      </div>
+
+      <!-- Links -->
+      <div class="flex flex-wrap gap-4 mt-8">
+        {project.github && (
+          <a href={project.github} target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-widest border border-border bg-card text-text hover:border-primary hover:text-primary transition-all">
+            [Source Code] ↗
+          </a>
+        )}
+        {project.demo && (
+          <a href={project.demo} target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-widest border border-primary bg-primary/10 text-primary hover:bg-primary/20 transition-all">
+            [Launch App] ↗
+          </a>
+        )}
+      </div>
+    </div>
+
+    <!-- Detail sections -->
+    <div class="space-y-8">
+      {project.problem && (
+        <div class="border-l-2 border-border pl-6">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-3 flex items-center gap-2">
+            <span class="text-primary">01 //</span> The Problem
+          </h2>
+          <p class="text-sm text-text-muted leading-relaxed">{project.problem}</p>
+        </div>
+      )}
+
+      {project.solution && (
+        <div class="border-l-2 border-border pl-6">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-3 flex items-center gap-2">
+            <span class="text-primary">02 //</span> The Solution
+          </h2>
+          <p class="text-sm text-text-muted leading-relaxed">{project.solution}</p>
+        </div>
+      )}
+
+      {project.design && (
+        <div class="border-l-2 border-border pl-6">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-3 flex items-center gap-2">
+            <span class="text-primary">03 //</span> Architecture
+          </h2>
+          <p class="text-sm text-text-muted leading-relaxed">{project.design}</p>
+        </div>
+      )}
+
+      {project.highlights && project.highlights.length > 0 && (
+        <div class="border-l-2 border-border pl-6">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-4 flex items-center gap-2">
+            <span class="text-primary">04 //</span> Operational Outcomes
+          </h2>
+          <ul class="space-y-2">
+            {project.highlights.map(item => (
+              <li class="flex items-start gap-3 text-sm text-text-muted">
+                <span class="text-success mt-0.5">›</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {project.images && project.images.length > 0 && (
+        <div class="border-l-2 border-border pl-6">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-4 flex items-center gap-2">
+            <span class="text-primary">05 //</span> Schematics
+          </h2>
+          <div class="grid grid-cols-1 gap-6">
+            {project.images.map(image => (
+              <figure class="border border-border bg-surface p-2">
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  class="w-full object-cover border border-border/50"
+                  loading="lazy"
+                />
+                {image.caption && (
+                  <figcaption class="px-2 pt-2 pb-1 text-xs text-text-muted uppercase tracking-widest">
+                    FIG: {image.caption}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+  <Footer />
+</Layout>

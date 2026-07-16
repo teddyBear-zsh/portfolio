@@ -1,0 +1,54 @@
+---
+import { experience } from "../../data/experience";
+---
+
+<section id="experience" class="py-20 max-w-4xl mx-auto px-6">
+  <h2 class="text-3xl font-bold font-heading mb-12 text-text flex items-center gap-4">
+    <span class="text-primary font-mono text-xl">02.</span>
+    Experience
+  </h2>
+
+  <div class="relative border-l border-border ml-3 md:ml-6">
+    {experience.map((job) => (
+      <article class="relative pl-8 md:pl-10 pb-12 last:pb-0">
+        <div
+          class="absolute w-4 h-4 bg-background border-2 border-primary rounded-full -left-2.5 top-1"
+        ></div>
+
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-xl font-bold text-text">
+              {job.role}
+              <span class="text-primary">@ {job.company}</span>
+            </h3>
+          </div>
+
+          <span class="text-sm font-mono text-text-muted whitespace-nowrap">
+            {job.period}
+          </span>
+        </div>
+
+        <p class="text-text-muted leading-relaxed mb-6">
+          {job.description}
+        </p>
+
+        <ul class="space-y-3 mb-6">
+          {job.responsibilities.map((item) => (
+            <li class="flex gap-3 text-text-muted">
+              <span class="text-primary mt-1">▹</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div class="flex flex-wrap gap-2">
+          {job.technologies.map((tech) => (
+            <span class="px-3 py-1 rounded-full bg-surface border border-border text-xs text-text-muted">
+              {tech}
+            </span>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
