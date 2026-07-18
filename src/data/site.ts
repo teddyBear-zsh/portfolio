@@ -24,10 +24,11 @@ export const SOCIALS = [
 // e.g. the day you publish the site, or the day you started this career path.
 export const MISSION_EPOCH = "2026-06-15T00:00:00Z";
 
+
 export const NAV_LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
+  { label: "Home", href: "#home" },
   { label: "Projects", href: "#projects" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
+  { label: "Lab", href: "#lab" },
+  { label: "Writing", href: "#writing" },
+  { label: "About", href: "#about" },
 ];

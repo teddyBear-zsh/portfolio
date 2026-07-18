@@ -12,6 +12,11 @@ export function getStaticPaths() {
 }
 
 const { project } = Astro.props;
+
+const STATUS: Record<string, { dot: string; label: string }> = {
+  shipped: { dot: 'bg-success', label: 'MVP SHIPPED' },
+  'in-progress': { dot: 'bg-warning', label: 'IN PROGRESS' },
+};
 ---
 
 <Layout title={`${project.name} | Documentation`} description={project.description}>
@@ -29,19 +34,22 @@ const { project } = Astro.props;
       <div class="absolute top-0 right-0 w-8 h-8 border-l border-b border-border bg-surface flex items-center justify-center text-text-muted text-[10px]">DOC</div>
       
       <div class="flex items-center gap-3 mb-6">
-        <span class="px-2 py-1 text-[10px] uppercase tracking-widest border border-primary text-primary bg-primary/10">
-          Status: {project.status || 'Active'}
+        <span class="inline-flex items-center gap-2 px-2 py-1 text-[10px] uppercase tracking-widest border border-border text-text-muted bg-card">
+          <span class={`w-2 h-2 rounded-full ${STATUS[project.status].dot}`}></span>
+          {STATUS[project.status].label}
         </span>
       </div>
       <h1 class="text-3xl md:text-5xl font-bold font-heading text-text mb-4 uppercase tracking-tight">{project.name}</h1>
       <p class="text-sm md:text-base text-text-muted leading-relaxed">{project.description}</p>
 
       <!-- Tech stack -->
-      <div class="flex flex-wrap gap-2 mt-6">
-        {project.technologies.map(tech => (
-          <span class="px-2 py-1 text-xs uppercase tracking-widest bg-card border border-border text-accent">{tech}</span>
-        ))}
-      </div>
+      {project.technologies && project.technologies.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-6">
+          {project.technologies.map(tech => (
+            <span class="px-2 py-1 text-xs uppercase tracking-widest bg-card border border-border text-accent">{tech}</span>
+          ))}
+        </div>
+      )}
 
       <!-- Links -->
       <div class="flex flex-wrap gap-4 mt-8">

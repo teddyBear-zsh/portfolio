@@ -1,10 +1,10 @@
 ---
 const links = [
   { name: 'Home', url: '#home' },
-  { name: 'Projects', url: '#projects' },
-  { name: 'Writing', url: '#blog' },
   { name: 'About', url: '#about' },
-  { name: 'Contact', url: '#contact' },
+  { name: 'Projects', url: '#projects' },
+  { name: 'Lab', url: '#lab' },
+  { name: 'Writing', url: '#writing' },
 ];
 ---
 <header class="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/90 backdrop-blur-sm font-mono text-sm">
@@ -26,6 +26,9 @@ const links = [
         <span class="w-1.5 h-1.5 rounded-full bg-success live-dot"></span>
         Live Feed
       </div>
+      <a href="#contact" class="px-4 py-1.5 border border-primary text-primary hover:bg-primary/10 transition-colors uppercase tracking-wider text-xs">
+        Transmit Message
+      </a>
     </nav>
 
     <div class="md:hidden flex items-center gap-4">
