@@ -1,35 +1,45 @@
 ---
 import { projects } from '../../data/projects';
+
+const STATUS: Record<string, { dot: string; label: string }> = {
+  shipped: { dot: 'bg-success', label: 'MVP SHIPPED' },
+  'in-progress': { dot: 'bg-warning', label: 'IN PROGRESS' },
+};
 ---
 <section id="projects" class="py-20 max-w-7xl mx-auto px-6 font-mono">
+  <div class="reveal">
   <div class="flex items-center gap-4 mb-12 border-b border-border pb-4">
     <h2 class="text-2xl font-bold uppercase tracking-widest text-text">
-      <span class="text-primary mr-2">01 /</span> Project Telemetry
+      <span class="text-primary mr-2">02 /</span> Projects
     </h2>
     <div class="h-px flex-1 bg-border"></div>
   </div>
-  
+
   <div class="grid grid-cols-1 gap-12">
     {projects.map((project) => (
-      <article class="group bg-surface/30 border border-border flex flex-col md:flex-row relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-1 h-full bg-primary/20 group-hover:bg-primary transition-colors"></div>
-        
+      <article class="group bg-surface/30 border border-border hover:border-primary flex flex-col md:flex-row relative overflow-hidden transition-colors">
+
         <div class="p-6 md:p-8 flex-1 border-b md:border-b-0 md:border-r border-border">
           <div class="flex justify-between items-start mb-4">
             <h3 class="text-xl font-bold text-text uppercase tracking-wide">{project.name}</h3>
-            <span class="text-xs font-mono px-2 py-1 bg-card border border-border text-text-muted uppercase tracking-widest">
-              Status: {project.status || 'Active'}
+            <span class="inline-flex items-center gap-2 text-xs font-mono px-2 py-1 bg-card border border-border text-text-muted uppercase tracking-widest">
+              <span class={`w-2 h-2 rounded-full ${STATUS[project.status].dot}`}></span>
+              {STATUS[project.status].label}
             </span>
           </div>
-          
-          <div class="mb-6">
-            <div class="flex flex-wrap gap-2">
-              {project.technologies.map(tech => (
-                <span class="text-xs px-2 py-1 bg-primary/10 text-primary border border-primary/20 uppercase tracking-widest">{tech}</span>
-              ))}
+
+          <p class="text-sm text-text-muted leading-relaxed mb-4">{project.description}</p>
+
+          {project.technologies && project.technologies.length > 0 && (
+            <div class="mb-6">
+              <div class="flex flex-wrap gap-2">
+                {project.technologies.map(tech => (
+                  <span class="text-xs px-2 py-1 bg-primary/10 text-primary border border-primary/20 uppercase tracking-widest">{tech}</span>
+                ))}
+              </div>
             </div>
-          </div>
-          
+          )}
+
           <div class="space-y-4 text-sm text-text-muted">
             {project.problem && (
               <div>
@@ -37,14 +47,14 @@ import { projects } from '../../data/projects';
                 <p class="leading-relaxed">{project.problem}</p>
               </div>
             )}
-            
+
             {project.solution && (
               <div>
                 <strong class="block text-text text-xs uppercase tracking-widest mb-1 border-b border-border/50 pb-1">Solution</strong>
                 <p class="leading-relaxed">{project.solution}</p>
               </div>
             )}
-            
+
             {project.design && (
               <div>
                 <strong class="block text-text text-xs uppercase tracking-widest mb-1 border-b border-border/50 pb-1">Architecture</strong>
@@ -53,20 +63,22 @@ import { projects } from '../../data/projects';
             )}
           </div>
         </div>
-        
+
         <div class="p-6 md:w-64 bg-card/50 flex flex-col justify-between">
-          <div>
-            <strong class="block text-text text-xs uppercase tracking-widest mb-2 border-b border-border/50 pb-1">Outcome</strong>
-            <ul class="text-xs text-text-muted space-y-2 list-none">
-              {project.highlights?.slice(0, 3).map(highlight => (
-                <li class="flex items-start gap-2">
-                  <span class="text-success mt-0.5">›</span>
-                  <span class="leading-relaxed">{highlight}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
+          {project.highlights && project.highlights.length > 0 && (
+            <div>
+              <strong class="block text-text text-xs uppercase tracking-widest mb-2 border-b border-border/50 pb-1">Outcome</strong>
+              <ul class="text-xs text-text-muted space-y-2 list-none">
+                {project.highlights.map(highlight => (
+                  <li class="flex items-start gap-2">
+                    <span class="text-success mt-0.5">›</span>
+                    <span class="leading-relaxed">{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div class="mt-8 flex flex-col gap-3">
             {project.github && (
               <a href={project.github} target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-2 border border-border hover:border-primary text-xs uppercase tracking-widest transition-colors group/btn">
@@ -85,5 +97,6 @@ import { projects } from '../../data/projects';
         </div>
       </article>
     ))}
+  </div>
   </div>
 </section>

@@ -8,7 +8,8 @@ export interface Project {
   slug: string;
   name: string;
   description: string;
-  technologies: string[];
+  status: "shipped" | "in-progress";
+  technologies?: string[];
   github?: string;
   demo?: string;
   // Detail page fields
@@ -16,33 +17,15 @@ export interface Project {
   solution?: string;
   design?: string;
   highlights?: string[];
-  status?: string;
   images?: ProjectImage[];
 }
 
 export const projects: Project[] = [
   {
-    slug: "cloud-architect-sandbox",
-    name: "Cloud Architect Sandbox",
-    description: "An automated environment provisioning tool for testing cloud architectures safely and cost-effectively.",
-    technologies: ["AWS CDK", "TypeScript", "Python"],
-    github: "https://github.com",
-    demo: "https://demo.com",
-    problem: "Cloud architects need to test different infrastructure topologies without risking production costs or stability. Manually spinning up and tearing down environments is slow and error-prone.",
-    solution: "An automated provisioning tool built on AWS CDK that lets you define sandbox environments declaratively. It provisions isolated VPCs, IAM roles, and resources on demand, then cleans everything up on a schedule to keep costs near zero.",
-    design: "The core is a CDK construct library that abstracts common patterns (VPC, ECS cluster, RDS, etc.) behind composable building blocks. A Python CLI wraps the CDK commands and handles state tracking in DynamoDB. Environments are tagged with an expiry timestamp, and a Lambda runs nightly to destroy anything expired.",
-    highlights: [
-      "Reduced environment setup from 2 hours to under 5 minutes",
-      "Cost savings of ~80% vs always-on staging environments",
-      "Supports 12 pre-built architecture templates",
-      "Full teardown guarantee via scheduled Lambda cleaner"
-    ],
-    status: "Active"
-  },
-  {
-    slug: "serverless-receipts-processing",
-    name: "Serverless Receipts Processing System",
+    slug: "receipts-auto",
+    name: "receipts-auto",
     description: "A fully serverless pipeline that ingests, parses, and stores receipt data with real-time observability.",
+    status: "shipped",
     technologies: ["Go", "React", "Prometheus", "Grafana"],
     github: "https://github.com",
     problem: "Small businesses need to digitize paper receipts and track expenses without paying for heavyweight SaaS solutions. Existing tools are expensive or require manual data entry.",
@@ -53,7 +36,29 @@ export const projects: Project[] = [
       "~$0 operational cost under 10k receipts/month (within free tier)",
       "Real-time Grafana dashboard with processing metrics",
       "OCR accuracy > 95% on printed receipts"
-    ],
-    status: "In Progress"
+    ]
+  },
+  {
+    slug: "cliparch",
+    name: "clipArch",
+    description: "Custom clipboard manager for text and images on Arch Linux. Works with GNOME and Hyprland.",
+    status: "shipped",
+    technologies: ["Python", "CSS"],
+    github: "https://github.com/teddyBear-zsh/clipArch.git",
+    problem: "Most clipboard managers on Linux are either too heavyweight, don't work across both GNOME and Hyprland, or have poor keyboard-driven UX for power users.",
+    solution: "A lightweight Python clipboard manager that hooks into the system clipboard via xclip/wl-clipboard, stores history in SQLite, and surfaces it through a minimal GTK popup triggered by a keybind. Works seamlessly on both X11 and Wayland.",
+    design: "The daemon runs in the background and listens for clipboard change events. History is persisted in a local SQLite database. The UI is a small GTK window styled with CSS, designed to feel native on both GNOME and Hyprland without any heavy dependencies.",
+    highlights: [
+      "Works on X11 (GNOME) and Wayland (Hyprland) with the same binary",
+      "Keyboard-first UX: open, search, paste — all without a mouse",
+      "Stores text and images in clipboard history",
+      "SQLite-backed history survives reboots"
+    ]
+  },
+  {
+    slug: "cherrypick",
+    name: "cherrypick",
+    description: "Terminal UI for interactive git cherry-picking, lazygit-inspired.",
+    status: "in-progress"
   }
 ];

@@ -1,20 +1,10 @@
-import { Icon } from "astro/runtime/client/dev-toolbar/ui-library/icons.js";
+export interface SkillRow {
+  label: string;
+  value: string;
+}
 
-export const skillCategories = [
-  {
-    name: "Cloud",
-    skills: ["AWS", "Docker", "Kubernetes", "Terraform"]
-  },
-  {
-    name: "Backend",
-    skills: ["Node.js", "Python", "Go", "PostgreSQL", "Redis"]
-  },
-  {
-    name: "Frontend",
-    skills: ["Astro", "TypeScript", "Tailwind CSS", "React"]
-  },
-  {
-    name: "DevOps",
-    skills: ["GitHub Actions", "GitLab CI", "Linux", "Prometheus"]
-  }
+export const skills: SkillRow[] = [
+  { label: "Frontend", value: "Angular, TypeScript" },
+  { label: "Backend", value: "Node.js, Express" },
+  { label: "Infra", value: "AWS, Docker, GitLab CI/CD" }
 ];
