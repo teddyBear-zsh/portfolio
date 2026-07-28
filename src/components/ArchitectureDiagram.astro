@@ -1,0 +1,61 @@
+---
+interface Step {
+  title: string;
+  subtitle: string;
+}
+
+interface Branch {
+  fromStep: number; // index into `steps` this branch splits off from
+  label?: string;
+  steps: Step[];
+}
+
+interface Props {
+  steps: Step[];
+  caption?: string;
+  branch?: Branch;
+}
+
+const { steps, caption, branch } = Astro.props;
+---
+
+<div class="border border-border bg-surface/30 p-4 md:p-6">
+  <div class="flex flex-wrap items-center gap-2 md:gap-3">
+    {steps.map((step, i) => (
+      <>
+        <div class="border border-border bg-card px-3 py-2 md:px-4 md:py-3 min-w-[9rem]">
+          <p class="text-xs md:text-sm font-bold font-heading text-text uppercase tracking-wide">{step.title}</p>
+          <p class="text-[11px] md:text-xs text-text-muted leading-snug mt-0.5">{step.subtitle}</p>
+        </div>
+        {i < steps.length - 1 && (
+          <span class="text-accent text-lg leading-none select-none" aria-hidden="true">→</span>
+        )}
+      </>
+    ))}
+  </div>
+
+  {branch && (
+    <div class="flex items-start gap-2 md:gap-3 mt-3 pl-6 md:pl-10 border-l border-dashed border-border">
+      <span class="text-xs text-text-muted uppercase tracking-widest mt-2 shrink-0">
+        {branch.label ?? 'on failure'} ↳
+      </span>
+      <div class="flex flex-wrap items-center gap-2 md:gap-3">
+        {branch.steps.map((step, i) => (
+          <>
+            <div class="border border-danger/40 bg-card px-3 py-2 md:px-4 md:py-3 min-w-[9rem]">
+              <p class="text-xs md:text-sm font-bold font-heading text-text uppercase tracking-wide">{step.title}</p>
+              <p class="text-[11px] md:text-xs text-text-muted leading-snug mt-0.5">{step.subtitle}</p>
+            </div>
+            {i < branch.steps.length - 1 && (
+              <span class="text-danger text-lg leading-none select-none" aria-hidden="true">→</span>
+            )}
+          </>
+        ))}
+      </div>
+    </div>
+  )}
+
+  {caption && (
+    <p class="text-xs text-text-muted italic mt-4">{caption}</p>
+  )}
+</div>

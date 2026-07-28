@@ -2,24 +2,36 @@
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
-import { projects } from '../../data/projects';
+import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import StatBadge from '../../components/StatBadge.astro';
+import TechTag from '../../components/TechTag.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
-export function getStaticPaths() {
-  return projects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project },
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((entry) => ({
+    params: { slug: entry.id },
+    props: { project: entry.data, slug: entry.id },
   }));
 }
 
-const { project } = Astro.props;
+const { project, slug } = Astro.props;
+
+// Sketch images live at src/assets/{slug}/{image}; resolved via glob since
+// the path comes from content data rather than a static import.
+const sketchImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/**/*.{jpeg,jpg,png,gif,webp}',
+);
 
 const STATUS: Record<string, { dot: string; label: string }> = {
   shipped: { dot: 'bg-success', label: 'MVP SHIPPED' },
   'in-progress': { dot: 'bg-warning', label: 'IN PROGRESS' },
+  archived: { dot: 'bg-text-muted', label: 'ARCHIVED' },
 };
 ---
 
-<Layout title={`${project.name} | Documentation`} description={project.description}>
+<Layout title={`${project.title} | Documentation`} description={project.plainSummary}>
   <Navigation />
   <main class="max-w-4xl mx-auto px-6 py-24 font-mono">
 
@@ -32,35 +44,28 @@ const STATUS: Record<string, { dot: string; label: string }> = {
     <!-- Header -->
     <div class="mb-12 border border-border bg-surface/30 p-6 md:p-8 relative">
       <div class="absolute top-0 right-0 w-8 h-8 border-l border-b border-border bg-surface flex items-center justify-center text-text-muted text-[10px]">DOC</div>
-      
+
       <div class="flex items-center gap-3 mb-6">
         <span class="inline-flex items-center gap-2 px-2 py-1 text-[10px] uppercase tracking-widest border border-border text-text-muted bg-card">
           <span class={`w-2 h-2 rounded-full ${STATUS[project.status].dot}`}></span>
           {STATUS[project.status].label}
         </span>
       </div>
-      <h1 class="text-3xl md:text-5xl font-bold font-heading text-text mb-4 uppercase tracking-tight">{project.name}</h1>
-      <p class="text-sm md:text-base text-text-muted leading-relaxed">{project.description}</p>
+      <h1 class="text-3xl md:text-5xl font-bold font-heading text-text mb-4 uppercase tracking-tight">{project.title}</h1>
 
-      <!-- Tech stack -->
-      {project.technologies && project.technologies.length > 0 && (
-        <div class="flex flex-wrap gap-2 mt-6">
-          {project.technologies.map(tech => (
-            <span class="px-2 py-1 text-xs uppercase tracking-widest bg-card border border-border text-accent">{tech}</span>
-          ))}
-        </div>
-      )}
+      <!-- Plain-language summary: reads as an executive summary before the technical detail -->
+      <p class="text-lg md:text-xl font-heading text-text leading-snug">{project.plainSummary}</p>
 
       <!-- Links -->
       <div class="flex flex-wrap gap-4 mt-8">
-        {project.github && (
-          <a href={project.github} target="_blank" rel="noopener noreferrer"
+        {project.repoUrl && (
+          <a href={project.repoUrl} target="_blank" rel="noopener noreferrer"
             class="inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-widest border border-border bg-card text-text hover:border-primary hover:text-primary transition-all">
             [Source Code] ↗
           </a>
         )}
-        {project.demo && (
-          <a href={project.demo} target="_blank" rel="noopener noreferrer"
+        {project.liveUrl && (
+          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
             class="inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-widest border border-primary bg-primary/10 text-primary hover:bg-primary/20 transition-all">
             [Launch App] ↗
           </a>
@@ -88,51 +93,69 @@ const STATUS: Record<string, { dot: string; label: string }> = {
         </div>
       )}
 
-      {project.design && (
+      {project.architecture && project.architecture.length > 0 && (
         <div class="border-l-2 border-border pl-6">
-          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-3 flex items-center gap-2">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-4 flex items-center gap-2">
             <span class="text-primary">03 //</span> Architecture
           </h2>
-          <p class="text-sm text-text-muted leading-relaxed">{project.design}</p>
-        </div>
-      )}
-
-      {project.highlights && project.highlights.length > 0 && (
-        <div class="border-l-2 border-border pl-6">
-          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-4 flex items-center gap-2">
-            <span class="text-primary">04 //</span> Operational Outcomes
-          </h2>
-          <ul class="space-y-2">
-            {project.highlights.map(item => (
-              <li class="flex items-start gap-3 text-sm text-text-muted">
-                <span class="text-success mt-0.5">›</span>
-                {item}
-              </li>
+          <div class="space-y-8">
+            {project.architecture.map(pipeline => (
+              <div>
+                <h3 class="text-xs uppercase tracking-widest text-text mb-3">{pipeline.label}</h3>
+                <ArchitectureDiagram steps={pipeline.steps} caption={pipeline.caption} />
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
 
-      {project.images && project.images.length > 0 && (
+      {project.sketches && project.sketches.length > 0 && (
         <div class="border-l-2 border-border pl-6">
           <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-4 flex items-center gap-2">
-            <span class="text-primary">05 //</span> Schematics
+            <span class="text-primary">04 //</span> Sketches
           </h2>
           <div class="grid grid-cols-1 gap-6">
-            {project.images.map(image => (
-              <figure class="border border-border bg-surface p-2">
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  class="w-full object-cover border border-border/50"
-                  loading="lazy"
-                />
-                {image.caption && (
+            {project.sketches.map(sketch => {
+              const path = `/src/assets/${slug}/${sketch.image}`;
+              const loader = sketchImages[path];
+              return loader ? (
+                <figure class="border border-border bg-surface p-2">
+                  <Image
+                    src={loader()}
+                    alt={sketch.caption}
+                    class="w-full object-cover border border-border/50"
+                  />
                   <figcaption class="px-2 pt-2 pb-1 text-xs text-text-muted uppercase tracking-widest">
-                    FIG: {image.caption}
+                    FIG: {sketch.caption}
                   </figcaption>
-                )}
-              </figure>
+                </figure>
+              ) : null;
+            })}
+          </div>
+        </div>
+      )}
+
+      {project.outcomes && project.outcomes.length > 0 && (
+        <div class="border-l-2 border-border pl-6">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-4 flex items-center gap-2">
+            <span class="text-primary">05 //</span> Operational Outcomes
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {project.outcomes.map(item => (
+              <StatBadge value={item.value} label={item.label} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {project.techStack && project.techStack.length > 0 && (
+        <div class="border-l-2 border-border pl-6">
+          <h2 class="text-sm font-bold uppercase tracking-widest text-text mb-4 flex items-center gap-2">
+            <span class="text-primary">06 //</span> Tech Stack
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {project.techStack.map(tech => (
+              <TechTag name={tech.name} icon={tech.icon} />
             ))}
           </div>
         </div>

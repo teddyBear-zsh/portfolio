@@ -1,0 +1,56 @@
+title: receipts-auto
+status: shipped
+plainSummary: >
+  Turns photos of receipts into organized data, with no manual work.
+problem: |
+  Small businesses need to digitize paper receipts and track expenses without
+  paying for heavyweight SaaS solutions. Existing tools are expensive or
+  require manual data entry.
+solution: |
+  A serverless pipeline where receipts are uploaded to S3, triggering a Go
+  Lambda that uses OCR to extract line items and totals. Parsed data lands in
+  DynamoDB. A separate scheduled pipeline builds a monthly report from that
+  data and emails it out. Prometheus and Grafana provide full observability
+  on processing latency and error rates.
+architecture:
+  - name: ingestion
+    label: Ingestion
+    steps:
+      - title: S3
+        subtitle: receipt uploaded
+      - title: Lambda
+        subtitle: calls Textract (OCR)
+      - title: DynamoDB
+        subtitle: parsed data
+    caption: >
+      If OCR fails, the message goes to an SQS dead-letter queue
+      (the receipt is never lost).
+  - name: reporting
+    label: Monthly report
+    steps:
+      - title: EventBridge
+        subtitle: monthly scheduler
+      - title: Lambda
+        subtitle: reads DynamoDB, builds CSV
+      - title: SES
+        subtitle: email with CSV attached
+    caption: Runs on a cron, independent from the ingestion flow.
+outcomes:
+  - value: "3s"
+    label: per receipt processed
+  - value: "95%"
+    label: OCR accuracy
+  - value: "$0"
+    label: operational cost under 10k receipts/month (free tier)
+techStack:
+  - name: Go
+    icon: brand-golang
+  - name: Terraform
+    icon: brand-terraform
+  - name: AWS Lambda
+    icon: brand-aws
+  - name: Prometheus
+    icon: flame
+  - name: Grafana
+    icon: chart-area
+repoUrl: https://github.com

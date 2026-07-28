@@ -1,0 +1,41 @@
+title: clipArch
+status: shipped
+plainSummary: >
+  A lightweight clipboard history tool that works the same way on GNOME and Hyprland.
+problem: |
+  Most clipboard managers on Linux are either too heavyweight, don't work
+  across both GNOME and Hyprland, or have poor keyboard-driven UX for power
+  users.
+solution: |
+  A lightweight Python clipboard manager that hooks into the system clipboard
+  via xclip/wl-clipboard, stores history in SQLite, and surfaces it through a
+  minimal GTK popup triggered by a keybind. Works seamlessly on both X11 and
+  Wayland.
+architecture:
+  - name: clipboard-daemon
+    label: Clipboard daemon
+    steps:
+      - title: xclip / wl-clipboard
+        subtitle: detects clipboard change
+      - title: Daemon (Python)
+        subtitle: captures content, writes to history
+      - title: SQLite
+        subtitle: persisted history
+      - title: GTK popup
+        subtitle: keybind-triggered, search + paste
+    caption: The same binary runs unmodified on X11 (GNOME) and Wayland (Hyprland).
+outcomes:
+  - value: "X11 + Wayland"
+    label: same binary works on both display servers
+  - value: "0"
+    label: mouse clicks needed to search and paste
+  - value: "Text + Images"
+    label: clipboard content types stored in history
+  - value: "SQLite"
+    label: history survives reboots
+techStack:
+  - name: Python
+    icon: brand-python
+  - name: CSS
+    icon: brand-css3
+repoUrl: https://github.com/teddyBear-zsh/clipArch.git
