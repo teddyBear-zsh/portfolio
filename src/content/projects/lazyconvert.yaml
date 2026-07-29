@@ -1,0 +1,35 @@
+title: lazyconvert
+status: in-progress
+plainSummary: >
+  A terminal tool that converts common file formats into each other, without
+  leaving the keyboard.
+problem: |
+  # TBD — Teddy to draft
+solution: |
+  # TBD — Teddy to draft
+architecture:
+  - type: hub
+    name: pdf-hub
+    label: PDF hub
+    center:
+      title: PDF
+    spokes:
+      - title: Doc
+      - title: xls / csv
+      - title: Img
+      - title: epub
+      - title: text
+      - title: ods
+    caption: Every format converts both ways, no one-directional dead ends.
+  - type: hub
+    name: img-hub
+    label: Img hub
+    center:
+      title: Img
+    spokes:
+      - title: png
+      - title: webp
+      - title: jpg
+      - title: svg
+outcomes: []
+techStack: []

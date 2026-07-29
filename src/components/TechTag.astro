@@ -1,0 +1,15 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  name: string;
+  icon: string;
+}
+
+const { name, icon } = Astro.props;
+---
+
+<span class="inline-flex items-center gap-2 px-2 py-1 text-xs uppercase tracking-widest bg-card border border-border text-accent">
+  <Icon name={`tabler:${icon}`} class="w-4 h-4 shrink-0" />
+  {name}
+</span>

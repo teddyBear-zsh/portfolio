@@ -1,9 +1,13 @@
 ---
-import { projects } from '../../data/projects';
+import { getCollection } from 'astro:content';
+
+const projectEntries = await getCollection('projects');
+const projects = projectEntries.map((entry) => ({ slug: entry.id, ...entry.data }));
 
 const STATUS: Record<string, { dot: string; label: string }> = {
   shipped: { dot: 'bg-success', label: 'MVP SHIPPED' },
   'in-progress': { dot: 'bg-warning', label: 'IN PROGRESS' },
+  archived: { dot: 'bg-text-muted', label: 'ARCHIVED' },
 };
 ---
 <section id="projects" class="py-20 max-w-7xl mx-auto px-6 font-mono">
@@ -21,20 +25,20 @@ const STATUS: Record<string, { dot: string; label: string }> = {
 
         <div class="p-6 md:p-8 flex-1 border-b md:border-b-0 md:border-r border-border">
           <div class="flex justify-between items-start mb-4">
-            <h3 class="text-xl font-bold text-text uppercase tracking-wide">{project.name}</h3>
+            <h3 class="text-xl font-bold text-text uppercase tracking-wide">{project.title}</h3>
             <span class="inline-flex items-center gap-2 text-xs font-mono px-2 py-1 bg-card border border-border text-text-muted uppercase tracking-widest">
               <span class={`w-2 h-2 rounded-full ${STATUS[project.status].dot}`}></span>
               {STATUS[project.status].label}
             </span>
           </div>
 
-          <p class="text-sm text-text-muted leading-relaxed mb-4">{project.description}</p>
+          <p class="text-sm text-text-muted leading-relaxed mb-4">{project.plainSummary}</p>
 
-          {project.technologies && project.technologies.length > 0 && (
+          {project.techStack && project.techStack.length > 0 && (
             <div class="mb-6">
               <div class="flex flex-wrap gap-2">
-                {project.technologies.map(tech => (
-                  <span class="text-xs px-2 py-1 bg-primary/10 text-primary border border-primary/20 uppercase tracking-widest">{tech}</span>
+                {project.techStack.map(tech => (
+                  <span class="text-xs px-2 py-1 bg-primary/10 text-primary border border-primary/20 uppercase tracking-widest">{tech.name}</span>
                 ))}
               </div>
             </div>
@@ -54,25 +58,18 @@ const STATUS: Record<string, { dot: string; label: string }> = {
                 <p class="leading-relaxed">{project.solution}</p>
               </div>
             )}
-
-            {project.design && (
-              <div>
-                <strong class="block text-text text-xs uppercase tracking-widest mb-1 border-b border-border/50 pb-1">Architecture</strong>
-                <p class="leading-relaxed">{project.design}</p>
-              </div>
-            )}
           </div>
         </div>
 
         <div class="p-6 md:w-64 bg-card/50 flex flex-col justify-between">
-          {project.highlights && project.highlights.length > 0 && (
+          {project.outcomes && project.outcomes.length > 0 && (
             <div>
               <strong class="block text-text text-xs uppercase tracking-widest mb-2 border-b border-border/50 pb-1">Outcome</strong>
               <ul class="text-xs text-text-muted space-y-2 list-none">
-                {project.highlights.map(highlight => (
+                {project.outcomes.map(outcome => (
                   <li class="flex items-start gap-2">
                     <span class="text-success mt-0.5">›</span>
-                    <span class="leading-relaxed">{highlight}</span>
+                    <span class="leading-relaxed"><strong class="text-text">{outcome.value}</strong> {outcome.label}</span>
                   </li>
                 ))}
               </ul>
@@ -80,14 +77,14 @@ const STATUS: Record<string, { dot: string; label: string }> = {
           )}
 
           <div class="mt-8 flex flex-col gap-3">
-            {project.github && (
-              <a href={project.github} target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-2 border border-border hover:border-primary text-xs uppercase tracking-widest transition-colors group/btn">
+            {project.repoUrl && (
+              <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-2 border border-border hover:border-primary text-xs uppercase tracking-widest transition-colors group/btn">
                 <span>View Source</span>
                 <span class="text-primary group-hover/btn:translate-x-1 transition-transform">→</span>
               </a>
             )}
-            {project.demo && (
-              <a href={project.demo} target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-2 border border-primary bg-primary/5 hover:bg-primary/10 text-primary text-xs uppercase tracking-widest transition-colors group/btn">
+            {project.liveUrl && (
+              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-between px-3 py-2 border border-primary bg-primary/5 hover:bg-primary/10 text-primary text-xs uppercase tracking-widest transition-colors group/btn">
                 <span>Launch Demo</span>
                 <span class="group-hover/btn:translate-x-1 transition-transform">→</span>
               </a>
