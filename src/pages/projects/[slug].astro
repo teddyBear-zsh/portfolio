@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
 import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import HubDiagram from '../../components/HubDiagram.astro';
 import StatBadge from '../../components/StatBadge.astro';
 import TechTag from '../../components/TechTag.astro';
 import { getCollection } from 'astro:content';
@@ -102,7 +103,11 @@ const STATUS: Record<string, { dot: string; label: string }> = {
             {project.architecture.map(pipeline => (
               <div>
                 <h3 class="text-xs uppercase tracking-widest text-text mb-3">{pipeline.label}</h3>
-                <ArchitectureDiagram steps={pipeline.steps} caption={pipeline.caption} />
+                {pipeline.type === 'hub' ? (
+                  <HubDiagram id={pipeline.name} center={pipeline.center} spokes={pipeline.spokes} caption={pipeline.caption} />
+                ) : (
+                  <ArchitectureDiagram steps={pipeline.steps} caption={pipeline.caption} />
+                )}
               </div>
             ))}
           </div>

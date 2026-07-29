@@ -6,15 +6,34 @@ const architectureStepSchema = z.object({
   subtitle: z.string(),
 });
 
+const hubNodeSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+});
+
 // A project can have more than one pipeline (e.g. receipts-auto has an
 // ingestion pipeline and a separate scheduled reporting pipeline). Do not
 // force multiple unrelated flows into a single linear diagram.
-const architecturePipelineSchema = z.object({
+const architectureLinearSchema = z.object({
+  type: z.literal('linear').optional(),
   name: z.string(), // slug-like id, e.g. "ingestion"
   label: z.string(), // display heading, e.g. "Ingestion"
   steps: z.array(architectureStepSchema),
   caption: z.string().optional(),
 });
+
+// Hub-and-spoke pipelines (e.g. lazyconvert's PDF/img conversion hubs) don't
+// have a linear order — every spoke converts both ways with the center.
+const architectureHubSchema = z.object({
+  type: z.literal('hub'),
+  name: z.string(),
+  label: z.string(),
+  center: hubNodeSchema,
+  spokes: z.array(hubNodeSchema),
+  caption: z.string().optional(),
+});
+
+const architecturePipelineSchema = z.union([architectureHubSchema, architectureLinearSchema]);
 
 const statSchema = z.object({
   value: z.string(), // e.g. "3s", "95%"
